@@ -14,3 +14,9 @@ class PokemonEntity(models.Model):
     appeared_at = models.DateTimeField()
     disappeared_at = models.DateTimeField()
 
+    level = models.IntegerField('Level')
+    health = models.IntegerField('Health')
+    strength = models.IntegerField('Strength')
+    defence = models.IntegerField('Defence')
+    stamina = models.IntegerField('Stamina')
+
