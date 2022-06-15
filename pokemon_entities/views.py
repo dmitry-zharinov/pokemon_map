@@ -3,6 +3,7 @@ import json
 
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
+from django.utils.timezone import localtime
 
 from .models import Pokemon, PokemonEntity
 
@@ -30,7 +31,10 @@ def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
 def show_all_pokemons(request):
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     pokemons = Pokemon.objects.all()
-    pokemon_entities = PokemonEntity.objects.all()
+    pokemon_entities = PokemonEntity.objects.filter(
+        disappeared_at__gt=localtime(),
+        appeared_at__lt=localtime()
+    )
     
     for pokemon_entity in pokemon_entities:
         add_pokemon(
