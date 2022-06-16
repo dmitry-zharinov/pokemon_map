@@ -1,5 +1,3 @@
-import json
-
 import folium
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseNotFound
@@ -36,7 +34,7 @@ def show_all_pokemons(request):
         disappeared_at__gt=localtime(),
         appeared_at__lt=localtime()
     )
-    
+
     for pokemon_entity in pokemon_entities:
         add_pokemon(
             folium_map, pokemon_entity.latitude,
@@ -61,17 +59,6 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    '''
-    with open('pokemon_entities/pokemons.json', encoding='utf-8') as database:
-        pokemons = json.load(database)['pokemons']
-
-    for pokemon in pokemons:
-        if pokemon['pokemon_id'] == int(pokemon_id):
-            requested_pokemon = pokemon
-            break
-    else:
-        return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
-    '''
     try:
         requested_pokemon = Pokemon.objects.get(id=int(pokemon_id))
     except ObjectDoesNotExist:
@@ -84,7 +71,8 @@ def show_pokemon(request, pokemon_id):
         'title_jp': requested_pokemon.title,
         'description': requested_pokemon.description,
         'img_url': request.build_absolute_uri(requested_pokemon.image.url),
-        'previous_evolution': get_previous_evolution(request, requested_pokemon),
+        'previous_evolution':
+            get_previous_evolution(request, requested_pokemon),
         "next_evolution": get_next_evolution(request, requested_pokemon),
         }
 
@@ -113,7 +101,9 @@ def get_previous_evolution(request, pokemon):
         return {
             'title_ru': pokemon.previous_evolution.title,
             'pokemon_id': pokemon.previous_evolution.id,
-            'img_url': request.build_absolute_uri(pokemon.previous_evolution.image.url)
+            'img_url':
+                request.build_absolute_uri(
+                    pokemon.previous_evolution.image.url)
         }
 
 
