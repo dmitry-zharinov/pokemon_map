@@ -85,8 +85,9 @@ def show_pokemon(request, pokemon_id):
         'description': requested_pokemon.description,
         'img_url': request.build_absolute_uri(requested_pokemon.image.url),
         'previous_evolution': get_previous_evolution(request, requested_pokemon),
-        'entities': []
+        "next_evolution": get_next_evolution(request, requested_pokemon),
         }
+
     requested_entities = PokemonEntity.objects.filter(
         pokemon=requested_pokemon,
         disappeared_at__date__gte=localtime(),
@@ -110,7 +111,18 @@ def show_pokemon(request, pokemon_id):
 def get_previous_evolution(request, pokemon):
     if pokemon.previous_evolution:
         return {
-            "title_ru": pokemon.previous_evolution.title,
-            "pokemon_id": pokemon.previous_evolution.id,
-            "img_url": request.build_absolute_uri(pokemon.previous_evolution.image.url)
+            'title_ru': pokemon.previous_evolution.title,
+            'pokemon_id': pokemon.previous_evolution.id,
+            'img_url': request.build_absolute_uri(pokemon.previous_evolution.image.url)
         }
+
+
+def get_next_evolution(request, pokemon):
+    if not pokemon.next_evolutions.all():
+        return None
+    pokemon = pokemon.next_evolutions.all()[0]
+    return {
+        "title_ru": pokemon.title,
+        "pokemon_id": pokemon.id,
+        "img_url": request.build_absolute_uri(pokemon.image.url)
+    }
