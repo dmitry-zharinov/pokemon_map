@@ -80,6 +80,8 @@ def show_pokemon(request, pokemon_id):
     pokemon = {
         'pokemon_id': requested_pokemon.id,
         'title_ru': requested_pokemon.title,
+        'title_en': requested_pokemon.title,
+        'title_jp': requested_pokemon.title,
         'description': requested_pokemon.description,
         'img_url': request.build_absolute_uri(requested_pokemon.image.url),
         'entities': []
