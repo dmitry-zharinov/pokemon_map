@@ -84,6 +84,7 @@ def show_pokemon(request, pokemon_id):
         'title_jp': requested_pokemon.title,
         'description': requested_pokemon.description,
         'img_url': request.build_absolute_uri(requested_pokemon.image.url),
+        'previous_evolution': get_previous_evolution(request, requested_pokemon),
         'entities': []
         }
     requested_entities = PokemonEntity.objects.filter(
@@ -104,3 +105,12 @@ def show_pokemon(request, pokemon_id):
     return render(request, 'pokemon.html', context={
         'map': folium_map._repr_html_(), 'pokemon': pokemon
     })
+
+
+def get_previous_evolution(request, pokemon):
+    if pokemon.previous_evolution:
+        return {
+            "title_ru": pokemon.previous_evolution.title,
+            "pokemon_id": pokemon.previous_evolution.id,
+            "img_url": request.build_absolute_uri(pokemon.previous_evolution.image.url)
+        }
