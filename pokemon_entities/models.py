@@ -35,6 +35,7 @@ class PokemonEntity(models.Model):
     """Сущность Покемона"""
     pokemon = models.ForeignKey(
         Pokemon,
+        related_name='entities',
         verbose_name='Покемон',
         null=True,
         on_delete=models.SET_NULL)
