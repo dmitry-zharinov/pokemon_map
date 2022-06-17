@@ -64,7 +64,7 @@ def show_pokemon(request, pokemon_id):
     except ObjectDoesNotExist:
         return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
-    pokemon = {
+    serialized_pokemon = {
         'pokemon_id': requested_pokemon.id,
         'title_ru': requested_pokemon.title,
         'title_en': requested_pokemon.title,
@@ -92,7 +92,7 @@ def show_pokemon(request, pokemon_id):
         )
 
     return render(request, 'pokemon.html', context={
-        'map': folium_map._repr_html_(), 'pokemon': pokemon
+        'map': folium_map._repr_html_(), 'pokemon': serialized_pokemon
     })
 
 
